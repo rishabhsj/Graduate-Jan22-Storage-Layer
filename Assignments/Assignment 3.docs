@@ -62,4 +62,5 @@ Storage Layer - Assignment 3
 ->  SELECT first_name, last_name, date_of_birth FROM directors UNION SELECT first_name, last_name, date_of_birth FROM actors ORDER BY date_of_birth;
 
 21. Select the first and last names of all directors and actors born in the 1960s. Order the result by last name.
-->  ###check##SELECT first_name, last_name FROM directors UNION SELECT first_name, last_name FROM actors WHERE date_of_birth='1960' ORDER BY last_name;
+->  SELECT first_name, last_name FROM directors WHERE date_of_birth BETWEEN '1960-01-01' AND '1969-12-31' UNION SELECT first_name, last_name FROM actors WHERE date_of_birth BETWEEN '1960-01-01' AND '1969-12-31' ORDER BY last_name;
+

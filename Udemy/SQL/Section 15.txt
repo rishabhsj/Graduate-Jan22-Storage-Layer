@@ -1,0 +1,33 @@
+#CREATE TABLE Syntax:
+
+CREATE TABLE table_name (col1 datatype, col2 datatype, ..);
+
+
+#Rename Field:
+
+ALTER TABLE table_name RENAME col_oldname TO col_newname;
+
+
+#Rename Table:
+
+Alter TABLE old_tablename RENAME TO new_tablename;
+
+
+#Add a Field:
+
+ALTER TABLE table_name ADD column datatype;
+
+
+#Delete a field:
+
+ALTER TABLE table_name DROP COLUMN colmn;
+
+
+#Change Data Type:
+
+ALTER TABLE table_name ALTER COLUMN column SET DATA TYPE datatype;
+
+
+#DROP TABLE:
+
+DROP TABLE table_name;
