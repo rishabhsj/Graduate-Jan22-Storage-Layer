@@ -1,0 +1,56 @@
+Basic JOIN Syntax
+-> SELECT column_names FROM table1 INNER JOIN table2 ON table1.column_name=table2.column_name
+or
+SELECT column_names FROM table1 JOIN table2 ON table1.column_name=table2.column_name;
+
+Eg:
+SELECT firstname, lastname, orderdate FROM orders JOIN employees ON employees.employeeid=orders.employeeid;
+
+SELECT companyname, orderdate, unitprice, quantity FROM orders JOIN order_details ON orders.orderid=order_details.orderid JOIN customers ON customers.customerid=orders.customerid;
+
+LEFT JOIN:
+-> SELECT column_names FROM table1 LEFT JOIN table2 ON table1.column_name=table2.column_name;
+
+Eg: SELECT companyname, orderid FROM customers LEFT JOIN orders ON orders.customerid=customers.customerid;
+
+RIGHT JOIN:
+-> SELECT column_names FROM table1 RIGHT JOIN table2 ON table1.column_name=table2.column_name;
+
+Eg: SELECT column_names FROM table1 LEFT JOIN table2 ON table1.column_name=table2.column_name;
+
+FULL JOIN:
+-> SELECT column_names FROM table1 FULL JOIN table2 ON table1.column_name=table2.column_name;
+
+Eg: SELECT companyname, orderid FROM customers FULL JOIN orders ON customers.customerid=orders.customerid;
+
+SELF JOIN:
+-> SELECT column_name FROM table AS t1 JOIN table AS t2 USING t1.column=t2.column WHERE condition;
+
+Eg: SELECT c1.companyname AS CustomerName1, c2.companyname AS CustomerName2, c1.city FROM customers AS c1 JOIN customers AS c2 ON c1.city=c2.city WHERE c1.customerid <> c2.customerid ORDER BY c1.city; 
+
+USING to reduce typing:
+-> ON customer.customerid=orders.customerid  ==> USING(customerid)
+
+Eg: SELECT * FROM orders JOIN order_details USING (orderid);
+
+NATURAL:
+-> FROM table1 NATURAL JOIN table2;
+
+Eg: SELECT * FROM orders NATURAL JOIN order_details;
+
+#AdventorWorks DB
+1.Join (with inner join) together person, personphone, businessentity and phonenumber type in the persons schema.  Return first name, middle name, last name, phone number and the name of the phone number type (home, office, etc.)  Order by business entity id descending.
+-> SELECT firstname,middlename,lastname,phonenumber,name FROM person.personphone AS ph JOIN person.businessentity AS be ON be.businessentityid=ph.businessentityid JOIN person.person AS pe ON pe.businessentityid=be.businessentityid JOIN person.phonenumbertype AS pnt ON pnt.phonenumbertypeid=ph.phonenumbertypeid ORDER BY ph.businessentityid DESC;
+-> SELECT firstname,middlename,lastname,phonenumber,name FROM person.personphone AS ph JOIN person.businessentity USING (businessentityid) JOIN person.person USING (businessentityid) JOIN person.phonenumbertype USING (phonenumbertypeid) ORDER BY ph.businessentityid DESC;
+
+2.Join (Inner) productmodel, productmodelproductiondescriptionculture, productdescription and culture from the production schema.  Return the productmodel name, culture name, and productdescription description ordered by the product model name.
+-> SELECT pm.name,c.name,description FROM production.productdescription JOIN production.productmodelproductdescriptionculture USING (productdescriptionid) JOIN production.culture AS c USING (cultureid) JOIN production.productmodel AS pm USING (productmodelid) ORDER BY pm.name ASC;
+
+3.Add a join to previous example to production.product and return the product name field in addition to other information.
+-> SELECT p.name,pm.name,c.name,description FROM production.productdescription JOIN production.productmodelproductdescriptionculture USING (productdescriptionid) JOIN production.culture AS c USING (cultureid) JOIN production.productmodel AS pm USING (productmodelid) JOIN production.product AS p USING (productmodelid) ORDER BY pm.name ASC;
+
+4.Join product and productreview in the schema table.  Include every record from product and any reviews they have.  Return the product name, review rating and comments.  Order by rating in ascending order.
+-> SELECT name, rating, comments FROM production.product LEFT JOIN production.productreview USING (productid) ORDER BY rating ASC;  
+
+5. Use a right join to combine workorder and product from production schema to bring back all products and any work orders they have.  Include the product name and workorder orderqty and scrappedqty fields.  Order by productid ascending.
+-> SELECT p.name,orderqty,scrappedqty FROM production.workorder RIGHT JOIN production.product AS p USING (productid) ORDER BY p.productid ASC;

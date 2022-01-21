@@ -1,0 +1,4 @@
+Schemas
+
+SELECT * FROM production.product;
+SELECT * FROM production.vendor;

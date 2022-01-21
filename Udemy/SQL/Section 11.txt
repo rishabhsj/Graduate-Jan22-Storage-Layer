@@ -1,0 +1,19 @@
+EXISTS:
+-> SELECT column_name FROM table WHERE EXISTS (SELECT column_name FROM table_name WHERE condition)
+
+Eg: SELECT companyname FROM customers WHERE EXISTS (SELECT customerid FROM orders WHERE orders.customerid=customers.customerid AND orderdate BETWEEN '1997-04-01' AND '1997-04-30');
+
+Subquery using AND:
+-> SELECT column_name FROM table WHERE column operator ANY ( SELECT column_name FROM table_name WHERE condition)
+
+Eg:SELECT companyname FROM customers WHERE customerid = ANY (SELECT customerid FROM orders JOIN order_details ON orders.orderid=order_details.orderid WHERE quantity >50);
+
+Subquery using ALL:
+-> SELECT column_name FROM table WHERE column operator ALL ( SELECT column_name FROM table_name WHERE condition)
+
+Eg: SELECT productname FROM products JOIN order_details ON products.productid=order_details.productid WHERE order_details.unitprice *quantity > ALL (SELECT AVG(order_details.unitprice *quantity) FROM order_details GROUP BY productid);
+
+Subquery IN:
+-> SELECT column_name FROM table WHERE column IN (SELECT statement)
+
+Eg: SELECT companyname FROM customers WHERE country IN (SELECT country FROM suppliers);

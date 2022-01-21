@@ -1,0 +1,48 @@
+#Insert Into Syntax:
+
+INSERT INTO table_name (column1, column2,..) VALUES (value1, value2,..);
+
+
+#Update Syntax:
+
+UPDATE table_name SET column1=value1, column2=value2,... WHERE condition;
+
+##WHERE is must!
+
+
+#DELETE Syntax:
+
+DELETE FROM table_name WHERE condition;
+
+##WHERE is must!
+ 
+
+#SELECT INTO Syntax:
+
+SELECT column1, column2, INTO new_table FROM old_table WHERE condition;
+
+
+#INSERT INTO SELECT Syntax:
+
+INSERT INTO table1(col1, col2,...) SELECT col1,col2,... FROM table1 WHERE condition;
+
+or
+
+INSERT INTO table2 SELECT * FROM table1 WHERE condition;
+
+
+#Add Returning Clause To Insert:
+
+INSERT INTO table(field2, field2) VALUES(value1, vLUE2) RETURNING id;
+
+
+#Add Returning to Update:
+
+UPDATE table SET ...WHERE.... RETURNING fields;
+
+DELETE FROM employees RETURNING *;
+
+
+
+
+

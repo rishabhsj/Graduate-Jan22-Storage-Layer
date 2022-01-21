@@ -1,0 +1,20 @@
+GROUP BY Syntax:
+-> SELET column_name FROM table WHERE condition GROUP BY column_name;
+
+Eg: SELECT country, COUNT(*) FROM customers GROUP BY country ORDER BY COUNT(*) DESC;
+SELECT COUNT(*), country FROM suppliers GROUP BY country ORDER BY COUNT(*) DESC;
+SELECT productname, SUM(order_details.unitprice*quantity) FROM products JOIN order_details ON products.productid=order_details.productid JOIN orders ON orders.orderid=order_details.orderid WHERE orderdate BETWEEN '1997-01-01' AND '1997-12-31' GROUP BY productname ORDER BY SUM(order_details.unitprice*quantity) DESC;
+
+HAVING to filter groups:
+-> SELECT column_name, FROM table WHERE condition GROUP BY column_name(s) HAVING condition ORDER BY column_name(s);
+
+Eg: SELECT productname, SUM(quantity*order_details.unitprice) AS Amount_Bought FROM products JOIN order_details USING(productid) GROUP BY productname HAVING SUM(quantity*order_details.unitprice) <2000 ORDER BY Amount_Bought ASC;
+
+Grouping Set:
+SELECT categoryname, productname, SUM (od.unitprice*quantity) FROM categories NATURAL JOIN products NATURAL JOIN order_details AS od GROUP BY GROUPING SETS((categoryname), (categoryname, productname)) ORDER BY categoryname, productname;
+
+ROLLUP function:
+SELECT c.companyname, categoryname, productname, SUM(od.unitprice*quantity) FROM customers AS c NATURAL JOIN orders NATURAL JOIN order_details AS od JOIN products USING(productid) JOIN categories USING(categoryid) GROUP BY ROLLUP (companyname, categoryname, productname);
+
+CUBE-ROLLUP on Steroids:
+SELECT companyname, categoryname, productname, SUM(od.unitprice*quantity) FROM customers NATURAL JOIN orders NATURAL JOIN order_details AS od JOIN products USING(productid) JOIN categories USING (categoryid) GROUP BY CUBE(companyname, categoryname, productname);
