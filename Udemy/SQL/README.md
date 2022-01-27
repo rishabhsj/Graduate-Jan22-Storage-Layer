@@ -35,4 +35,3 @@ Section 30:
 Section 31: Managing Databases
 Section 32:
 Section 33:
-Section 34: 
