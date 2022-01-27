@@ -1,0 +1,41 @@
+Case WHEN:
+-> CASE WHEN condition THEN result
+WHEN condition THEN result
+ELSE default
+END
+
+Eg: SELECT companyname,country,
+CASE WHEN country IN ('Austria', 'Germany', 'Poland') THEN 'Europe' 
+WHEN country IN ('Mexico', 'USA', 'Canada') THEN 'North Ameria'
+WHEN country IN ('Brazil', 'Argentina') THEN 'South America'
+ELSE 'unknown'
+END AS continent
+FROM customers 
+
+
+OR
+
+CASE field WHEN value THEN result
+WHEN value THEN result
+ELSE default
+END
+
+Eg: SELECT companyname,
+CASE city WHEN 'New Orleans' THEN 'Big Easy'
+	WHEN 'Paris' THEN 'City of lights'
+	ELSE city
+END FROM suppliers;
+
+
+
+Coalesce:
+->COALESCE(field1, field2,...)
+
+Eg: SELECT customerid, COALESCE(shipregion, 'N/A') FROM orders
+
+
+NULLIF:
+-> NULLIF(field1, field2,..)
+
+Eg: SELECT companyname, phone,
+COALESCE (NULLIF(homepage,''),'Need to call') FROM suppliers

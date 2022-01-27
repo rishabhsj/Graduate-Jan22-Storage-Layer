@@ -1,0 +1,40 @@
+ACID Transaction:
+A-Atomicity
+C-Consistency
+I-Isolation
+D-Durability
+
+Simple Transaction Control:
+START TRANSACTION;
+	UPDATE products SET reorderlevel = reorderlevel -5;
+	
+	SELECT COUNT(*) FROM products WHERE unitsinstock + unitsonorder < reorderlevel;
+COMMIT;	
+
+
+Rollbacks and Savepoints:
+START TRANSACTION;
+	UPDATE orders SET orderdate=orderdate + INTERVAL '1 Year';
+ROLLBACK;	
+
+Savepoints are partial Rollbacks
+START TRANSACTION;
+	INSERT INTO employees(employeeid,lastname, firstname, title, birthdate, hiredate)
+	VALUES(501,'Jain', 'Rishabh','Mr', '1996-12-23', '2022-01-10');
+	
+SAVEPOINT inserted_employee;
+
+UPDATE employees SET birthdate='2025-01-16';
+
+ROLLBACK TO inserted_employee;
+
+UPDATE employees SET birthdate='1998-01-10' WHERE employeeid=501;
+
+COMMIT;
+
+SELECT * FROM employees WHERE employeeid=501;
+
+
+
+#PostgreSQL uses MVCC(Mutliversion Concurrency Control)
+

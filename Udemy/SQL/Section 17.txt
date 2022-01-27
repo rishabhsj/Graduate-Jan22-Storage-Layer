@@ -1,0 +1,8 @@
+Sequences:
+-> CRAETE SEQUENCE IF NOT EXISTS name;
+
+
+Alter and Delete Sequences:
+-> ALTER SEQUENCE name RESTART with start 
+ALTER SEQUENCE name RENAME TO new_name
+

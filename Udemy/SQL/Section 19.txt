@@ -1,0 +1,29 @@
+Views:
+-> CREATE VIEW view_name AS SELECT statment
+
+Eg: CREATE VIEW customer_order_details AS
+SELECT companyname, Orders.customerid, employeeid, orderdate, requireddate, shippeddate
+Shipvia, freight, shipname, shipaddress, shipcity, shipregion, shippostalcode, shipcountry,
+order_details.*
+FROM customers
+JOIN orders on customers.customerid=orders.customerid
+JOIN order_details on order_details.orderid=orders.orderid;
+
+SELECT *
+FROM customer_order_details
+WHERE customerid='TOMSP';
+
+
+Updable Views:
+-> 
+CREATE VIEW north_america_customers AS SELECT * FROM customers WHERE country IN ('USA', 'Canada','Mexico');
+
+INSERT INTO north_america_customers
+(customerid,companyname,contactname,contacttitle,address,city,region,postalcode,country,phone,fax)
+VALUES ('CFDCM','Catfish Dot Com','Will Bunker','President','Old Country Road','Lake Village','AR','71653','USA','555-555-5555',null);
+
+UPDATE north_america_customers SET fax='555-333-4141' WHERE customerid='CFDCM';
+
+DELETE FROM north_america_customers WHERE customerid='CFDCM';
+
+
