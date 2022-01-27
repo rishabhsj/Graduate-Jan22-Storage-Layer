@@ -1,0 +1,128 @@
+SQL Functions:
+-> CREATE OR REPLACE FUNCTION name() RETURNS void AS
+$$
+....statements...
+$$ LANGUAGE SQL
+
+Eg: 
+CREATE OR REPLACE FUNCTION fix_homepage() RETURNS void AS
+$$
+	UPDATE suppliers SET homepage='N/A' WHERE homepage IS NULL;
+$$ LANGUAGE SQL
+
+To run function-> SELECT fix_homepage()
+
+Eg:
+CREATE OR REPLACE FUNCTION set_employee() RETURNS void AS
+$$
+	UPDATE employees SET photopath='https://test.com' WHERE photopath IS NULL;
+$$ LANGUAGE SQL
+
+
+Syntax to return base type:
+CREATE OR REPLACE function name() RETURNS integer AS $$ SELECT... $$ LANGUAGE SQL
+
+Eg: CREATE OR REPLACE FUNCTION max_price() RETURNS real AS
+$$
+	SELECT MAX(unitprice) FROM products;
+$$ LANGUAGE SQL
+
+
+BASIC Type Parameters:
+-> CREATE OR REPLACE FUNCTION name(param1 type, param2 type,...) RETURNS type AS
+$$ ....  $$ LANGUAGE SQL
+
+Eg:
+CREATE OR REPLACE FUNCTION cust_largest_order(cid bpchar) RETURNS double precision AS
+$$
+	SELECT MAX(order_total) FROM (SELECT SUM(quantity*unitprice) AS order_total,orderid FROM order_details NATURAL JOIN orders WHERE customerid=cid GROUP BY orderid) AS order_total;
+$$ LANGUAGE SQL
+
+Composite Parameters:
+Eg: CREATE OR REPLACE FUNCTION new_price(products, increase_percent numeric) RETURNS double precision AS 
+$$ SELECT $1.unitprice * increase_percent/100;
+$$ LANGUAGE SQL
+
+SELECT productname, unitprice, new_price(products.*, 110) FROM products;
+
+Eg:
+CREATE OR REPLACE FUNCTION full_name(employees) RETURNS VARCHAR(62) AS 
+$$ SELECT $1.title || ' ' || $1.firstname || ' ' || $1.lastname;
+$$ LANGUAGE SQL
+
+SELECT full_name(employees.*),city,country FROM employees;
+
+
+Functions that returns a composite:
+Eg: CREATE OR REPLACE FUNCTION newest_hire() RETURNS employees AS $$
+SELECT * FROM employees ORDER BY hiredate ASC LIMIT 1; 
+$$ LANGUAGE SQL
+
+SELECT newest_hire();
+SELECT (newest_hire()).lastname;
+SELECT lastname(newest_hire())
+
+Label Parameters:
+-> CREATE FUNCTION name(IN x int, IN y int, out sum int)
+
+Eg: CREATE OR REPLACE FUNCTION sum_n_product(x int, y int, OUT sum int, OUT product int) AS $$
+SELECT x+y, x*y;
+$$ LANGUAGE SQL
+
+SELECT sum_n_product(5,4);
+
+Eg: CREATE OR REPLACE FUNCTION square_cube(IN x int, OUT square int, OUT cube int) AS $$
+SELECT x*x, x*x*x;
+$$ LANGUAGE SQL
+
+SELECT square_cube(3);
+
+
+Functions with Default Values:
+-> CREATE FUNCTION name (a int, b int DEFAULT 2, c int  DEFAULT 7)
+
+Eg: CREATE OR REPLACE FUNCTION new_price(products, 	increase_percent numeric DEFAULT 105) RETURNS double precision AS $$
+SELECT $1.unitprice * increase_percent/100;
+$$ LANGUAGE SQL
+
+SELECT productname, unitprice, new_price(products.*) FROM products;
+
+Eg: CREATE OR REPLACE FUNCTION square_cube(x int DEFAULT 5, OUT square int, OUT cube int) AS $$
+SELECT x*x, x*x*x;
+$$ LANGUAGE SQL
+
+
+SELECT square_cube()
+
+
+Using Functions as Table source:
+Eg: SELECT firstname, lastname, hiredate FROM newest_hire()
+Eg: SELECT productname, companyname FROM highest_inventory AS hi 
+JOIN suppliers on hi.supplierid=suppliers.supplierid;
+
+
+Function that returns more than one row:
+-> CREATE FUNCTION name() RETURNS SETOF type AS $$
+OR
+CREATE FUNCTION name(x int, OUT sum int, OUT product int) RETURNS SETOF records AS $$
+
+
+Another way: CREATE FUNCTION name(params) RETURNS TABLE (params) 
+Eg: 
+CREATE OR REPLACE FUNCTION next_birthday()
+RETURNS TABLE (birthday date, firstname VARCHAR(10), lastname VARCHAR(20), hiredate date) AS $$
+SELECT (birthdate + INTERVAL '1 Year' * (EXTRACT(YEAR FROM age(birthdate))+1 )):: date, 
+firstname, lastname, hiredate FROM employees;
+$$ LANGUAGE SQL
+
+SELECT * FROM next_birthday();
+
+
+
+Procedures: Functions that don't return anything
+-> CREATE OR REPLACE PROCEDURE name(param list) AS $$ ...statements... $$ LANGUAGE SQL
+CREATE OR REPLACE PROCEDURE change_supplier_prices(supplierid smallint, amount real) AS $$
+UPDATE products SET unitprice = unitprice + amount WHERE supplierid =$1;
+$$ LANGUAGE SQL
+
+CALL change_supplier_prices(20::smallint, 0.5);

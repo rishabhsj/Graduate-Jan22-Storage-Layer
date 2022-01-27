@@ -14,19 +14,19 @@ Section 9: Grouping and Aggregate functions
 Section 10: Combining Queries
 Section 11: Subqueries
 Section 12: Modifying Data in Tables: INSERT, UPDATE and DELETE
-Section 13: 
+*Section 13: Indexes and Performance Tuning
 Section 14:
 Section 15: Creating and Modifying TABLES
-Section 16:
-Section 17:
+Section 16: Table Constraints
+Section 17: Sequences
 Section 18:
-Section 19:
-Section 20:
-Section 21:
+Section 19: Views
+Section 20: Conditional Expressions
+Section 21: Using Date/Time in postgres
 Section 22:
 Section 23:
-Section 24:
-Section 25:
+Section 24: SQL Functions and Procedures
+Section 25: Transaction and Concurrancy Control
 Section 26:
 Section 27:
 Section 28:
@@ -35,10 +35,4 @@ Section 30:
 Section 31: Managing Databases
 Section 32:
 Section 33:
-Section 34:
-Section 35:
-Section 36:
-Section 37:
-Section 38:
-Section 39:
-Section 40:
+Section 34: 
