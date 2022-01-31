@@ -1,0 +1,38 @@
+Eg: pay_date int[]
+schedule text [][]
+pay_date int[4]
+
+
+Insert into Arrays:
+INSERT INTO friends (name, address, specialdates, children)
+ VALUES (ROW('Scott','X','Levy'),
+ 		ROW('357 Page Road','','Austin','TX','USA','88888'),
+ 		ROW('1972-03-01',46,'2002-01-30'),
+ 		   ARRAY['Ben','Jill']);
+
+
+Accessing element:
+Single element - schedule[2][1]
+
+Range of elements - schedule[1:2][1:1]
+schedule[:3][2:]
+
+
+modifying arrays:
+UPDATE friends SET children=ARRAY['Maddie', 'Timmy','Cheryl']
+WHERE (name).first_name='boyd';
+
+
+Searching Arrays:
+SELECT * FROM children WHERE 'Billy' = ANY(children);
+
+
+Array Operators:
+=, <>, <, >, <=, >=
+@> - contains
+<@ - is contained by 
+&& - have elements in common
+
+
+
+

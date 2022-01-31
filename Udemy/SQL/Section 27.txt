@@ -1,0 +1,110 @@
+PLpgSQL:
+
+CREATE FUNCTION name (parameters) RETURNS var type AS $$
+BEGIN
+.....statements....
+END;
+$$ LANGUAGE plpgsql;
+
+
+Handling function with output variables:
+Eg: CREATE OR REPLACE FUNCTION sum_n_product (x int, y int, OUT sum int, OUT product int) AS $$
+BEGIN
+	sum :=x+y;
+	product := x*y;
+	RETURN;
+END;
+$$ LANGUAGE PLPGSQL
+
+SELECT (sum_n_product(5,20)).*;
+
+Eg: CREATE OR REPLACE FUNCTION square_n_cube (IN x int, OUT square int, OUT cube int) AS $$
+BEGIN
+	square := x*x;
+	cube := x*x*x;
+	RETURN;
+END;
+$$ LANGUAGE PLPGSQL;
+
+SELECT (square_n_cube(55)).*;
+
+
+
+Returning Query Results:
+Eg: CREATE OR REPLACE FUNCTION sold_more_than(total_sales real)
+RETURNS SETOF products AS $$
+BEGIN 
+	RETURN QUERY SELECT * FROM products
+	WHERE productid IN (SELECT productid FROM 
+	(SELECT SUM(quantity * unitprice), productid FROM order_details 
+	 GROUP BY productid HAVING SUM(quantity*unitprice) > total_sales ) AS qualified_products);
+END;
+$$ LANGUAGE PLPGSQL;
+
+SELECT sold_more_than(2500);
+
+
+
+Declaring Variables:
+CREATE OR REPLACE FUNCTION middle_priced()
+RETURNS SETOF products AS $$
+
+	DECLARE
+		average_price real;
+		bottom_price real;
+		top_price real;
+	BEGIN
+		SELECT AVG(unitprice) INTO average_price
+		FROM products;
+
+		bottom_price := average_price * .75;
+		top_price := average_price * 1.25;
+
+		RETURN QUERY SELECT * FROM products
+		WHERE unitprice between bottom_price AND top_price;
+	END;
+$$ LANGUAGE plpgsql;
+
+
+SELECT * FROM middle_priced();
+
+
+
+Using IF-THEN statements:
+CREATE OR REPLACE FUNCTION product_price_category(price real)RETURNS text AS $$
+BEGIN
+	IF price > 50.0 THEN 
+		RETURN 'luxury';
+	ELSIF price > 25.0 THEN
+		RETURN 'consumer';
+	ELSE RETURN 'bargain';
+	END IF;
+END;
+$$ LANGUAGE PLPGSQL;
+
+SELECT product_price_category(unitprice),* FROM products;
+
+
+LOP AND WHILE :
+CREATE OR REPLACE FUNCTION factorial(x float) RETURNS float AS $$
+DECLARE
+	current_x float := x;
+	running_multiplication float := 1;
+BEGIN
+	LOOP
+		running_multiplication := running_multiplication * current_x;
+
+		current_x := current_x - 1;
+		EXIT WHEN current_x <= 0;
+	END LOOP;
+
+	RETURN running_multiplication;
+
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT factorial(13::float);
+
+
+
+
