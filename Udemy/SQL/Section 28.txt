@@ -1,0 +1,83 @@
+Triggers:
+CREATE FUNCTION name() RETURNS trigger AS &&
+BUILD 
+    ......
+END;
+$$ LANGUAGE PLPGSQL;
+
+
+Eg: CREATE OR REPLACE FUNCTION employees_timestamp() RETURNS trigger AS $$
+BEGIN
+	NEW.last_updated := now();
+	RETURN NEW;
+END;
+$$ LANGUAGE PLPGSQL;
+
+DROP TRIGGER IF EXISTS employee_timestamp ON employees;
+
+CREATE TRIGGER empoyees_timestamp BEFORE INSERT OR DELETE ON employees 
+FOR EACH ROW EXECUTE FUNCTION employees_timestamp();
+
+SELECT last_updated,* 
+FROM employees WHERE employeedid=1;
+
+
+
+Statement Triggers:
+
+CREATE TABLE order_details_audit(
+	operation char(1) NOT NULL,
+	userid text NOT NULL,
+	stamp timestamp NOT NULL,
+	orderid smallint NOT NULL,
+    productid smallint NOT NULL,
+    unitprice real NOT NULL,
+    quantity smallint NOT NULL,
+    discount real);
+
+
+CREATE OR REPLACE FUNCTION audit_order_details() RETURNS trigger AS $$
+BEGIN
+	IF (TF_OOP = 'DELETE') THEN 
+		INSERT INTO order_details_audit
+		SELECT 'D', user, now(),o.* FROM old_table o;
+	ELSIF (TG_OP = 'UPDATE') THEN
+		INSERT INTO order_details_audit
+		SELECT 'U', user, now(),o.* FROM old_table o;
+	ELSIF (TG_OP = 'INSERT') THEN
+		INSERT INTO order_details_audit
+		SELECT 'I', user, now(),o.* FROM old_table o;
+	END IF;
+	RETURN NULL;
+END;
+$$ LANGUAGE PLPGSQL;
+
+
+DROP TRIGGER IF EXISTS audit_order_details_insert ON  order_details;
+
+CREATE TRIGGER audit_order_details_insert AFTER INSERT ON order_details
+REFERENCING NEW TABLE AS new_table
+FOR EACH STATEMENT EXECUTE FUNCTION audit_order_details();
+
+
+DROP TRIGGER IF EXISTS audit_order_details_update ON  order_details;
+
+CREATE TRIGGER audit_order_details_upate AFTER UPDATE ON order_details
+REFERENCING NEW TABLE AS new_table
+FOR EACH STATEMENT EXECUTE FUNCTION audit_order_details();
+
+
+DROP TRIGGER IF EXISTS audit_order_details_delete ON  order_details;
+
+CREATE TRIGGER audit_order_details_delete AFTER DELETE ON order_details
+REFERENCING OLD TABLE AS old_table
+FOR EACH STATEMENT EXECUTE FUNCTION audit_order_details();
+
+
+INSERT INTO order_details 
+VALUES (10248, 3, 10, 5, 0);
+
+SELECT * FROM order_details_audit;
+
+
+

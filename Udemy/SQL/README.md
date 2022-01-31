@@ -27,12 +27,12 @@ Section 22:
 Section 23:
 Section 24: SQL Functions and Procedures
 Section 25: Transaction and Concurrancy Control
-Section 26:
-Section 27:
-Section 28:
-Section 29:
-Section 30:
+Section 26: Arrays Data Type
+Section 27: PL/pgSQL - SQL procedural language
+Section 28: Triggers
+Section 29: Copy CSV
+Section 30: JSON and JSON Dta Types
 Section 31: Managing Databases
-Section 32:
+Section 32: 
 Section 33:
 Section 34: 

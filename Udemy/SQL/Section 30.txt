@@ -1,0 +1,40 @@
+CREATE TABLE books (
+	id serial,
+	bookinfo jsonb
+)
+
+INSERT INTO books (bookinfo)
+VALUES
+('{"title": "Introduction To Data Mining",
+  "author": ["Pang-ning Tan", "Michael Steinbach", "Vipin Kumar"],
+  "publisher":"Addison Wesley", "date": 2006}'),
+('{"title": "Deep Learning with Python", "author": "Francois Chollet", "publisher":"Manning", "date": 2018}'),
+('{"title": "Neural Networks - A Visual Intro for Beginners", "author": "Michael Taylor", "publisher":"self", "date": 2017}'),
+('{"title": "Big Data In Practice", "author": "Bernard Marr", "publisher":"Wiley", "date": 2016}');
+
+
+ SELECT bookinfo->'author' FROM books;
+
+
+ Creating JSON from tables:
+ SELECT jsonb_build_object(
+	'id', air.id,
+	'ident', air.ident,
+	'name', air.name,
+	'latitude_deg', air.latitude_deg,
+	'elevation_ft', air.elevation_ft,
+	'continent', air.continent,
+	'iso_country', air.iso_country,
+	'iso_region', air.iso_region,
+	'airport_home_link', air.home_link,
+	'airport_wikipedia_link', air.wikipedia_link,
+	'municipality', air.municipality,
+	'scheduled_service', air.scheduled_service,
+	'gps_code', air.gps_code,
+	'iata_code', air.iata_code,
+	'airport_local_code', air.local_code
+)
+FROM airports AS air;
+
+
+Aggregating JSON Fields:
