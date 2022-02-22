@@ -1,4 +1,4 @@
-#Udemy Learning : https://mastek.udemy.com/learning-paths/2177752/
+
 
 ##SQL
 
